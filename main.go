@@ -98,6 +98,11 @@ func commandMapb(conf *config) error {
 	return nil
 }
 
+func commandExplore(conf *config) error {
+	// TODO: IMPLEMENT
+	return nil
+}
+
 type cliCommand struct {
 	name        string
 	description string
@@ -143,6 +148,11 @@ func main() {
 			name:        "mapb",
 			description: "Explore the Pokemon map, load the previous page",
 			callback:    commandMapb,
+		},
+		"explore": {
+			name:        "explore",
+			description: "List Pokemon in given location",
+			callback:    commandExplore,
 		},
 	}
 
