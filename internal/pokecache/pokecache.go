@@ -16,9 +16,9 @@ type cacheEntry struct {
 	val      []byte
 }
 
-func NewCache(interval time.Duration) Cache {
+func NewCache(interval time.Duration) *Cache {
 	fmt.Println(interval)
-	newCache := Cache{
+	newCache := &Cache{
 		cacheEntries: make(map[string]cacheEntry),
 	}
 	go newCache.reapLoop(interval)
@@ -36,10 +36,14 @@ func (c *Cache) Add(key string, val []byte) {
 }
 
 func (c *Cache) Get(key string) ([]byte, bool) {
+	c.cacheMutex.Lock()
 	entry, ok := c.cacheEntries[key]
+	c.cacheMutex.Unlock()
 	if !ok {
+		fmt.Printf("cache miss for key: %s\n", key)
 		return nil, false
 	}
+	fmt.Printf("cache hit for key: %s\n", key)
 	return entry.val, true
 }
 
