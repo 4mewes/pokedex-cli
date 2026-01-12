@@ -27,7 +27,7 @@ func commandHelp(conf *config) error {
 	return nil
 }
 
-func getLocationArea(url string, cache pokecache.Cache) (locationArea, error) {
+func getLocationArea(url string, cache *pokecache.Cache) (locationArea, error) {
 	//check cache
 	body, ok := cache.Get(url)
 	if !ok {
@@ -112,7 +112,7 @@ type cliCommand struct {
 type config struct {
 	next     string
 	previous string
-	cache    pokecache.Cache
+	cache    *pokecache.Cache
 }
 
 type locationArea struct {
