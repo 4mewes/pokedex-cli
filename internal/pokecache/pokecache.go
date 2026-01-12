@@ -38,10 +38,8 @@ func (c *Cache) Add(key string, val []byte) {
 func (c *Cache) Get(key string) ([]byte, bool) {
 	entry, ok := c.cacheEntries[key]
 	if !ok {
-		fmt.Printf("cache miss for key:%s\n", key)
 		return nil, false
 	}
-	fmt.Printf("retrieved from cache key:%s, val:%s\n", key, entry.val)
 	return entry.val, true
 }
 

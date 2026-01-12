@@ -45,8 +45,6 @@ func getLocationArea(url string, cache pokecache.Cache) (locationArea, error) {
 		cache.Add(url, body)
 	}
 
-	// TODO: manual testing map and mapb commands -> cache miss -> either cache add or get have bug
-
 	var locationAreaRes locationArea
 	err := json.Unmarshal(body, &locationAreaRes)
 	if err != nil {
@@ -59,7 +57,7 @@ func getLocationArea(url string, cache pokecache.Cache) (locationArea, error) {
 func commandMap(conf *config) error {
 	var url string
 	if conf.next == "" {
-		url = "http://pokeapi.co/api/v2/location-area/"
+		url = "https://pokeapi.co/api/v2/location-area/?offset=0&limit=20" //pokeapi default
 	} else {
 		url = conf.next
 	}
@@ -154,7 +152,7 @@ func main() {
 	conf.cache = pokecache.NewCache(5 * time.Second)
 
 	for {
-		fmt.Print("Pokedex >")
+		fmt.Print("Pokedex> ")
 		scanner.Scan()
 		userInputRaw := scanner.Text()
 		userInput := strings.ToLower(strings.TrimSpace(userInputRaw))
