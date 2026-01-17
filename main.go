@@ -198,13 +198,48 @@ func commandCatch(conf *config, args ...string) error {
 		if conf.pokedex == nil {
 			conf.pokedex = make(map[string]pokemonInfo)
 		}
-		conf.pokedex["pokemon"] = pokemonInfoRes
+		conf.pokedex[pokemon] = pokemonInfoRes
 		fmt.Printf("%s was caught!\n", pokemon)
 	} else {
 		fmt.Printf("%s escaped!\n", pokemon)
 	}
 
 	return nil
+}
+
+func printPokemonInfoFromPokedex(conf *config, pokemonName string) error {
+	pokemon, ok := conf.pokedex[pokemonName]
+	if !ok {
+		fmt.Printf("%s is not in your pokedex!\n", pokemonName)
+		return nil
+	}
+
+	fmt.Printf("Name: %s\n", pokemon.Name)
+	fmt.Printf("Height: %d\n", pokemon.Height)
+	fmt.Printf("Weight: %d\n", pokemon.Weight)
+	fmt.Printf("Stats:\n")
+	for i := range len(pokemon.Stats) {
+		fmt.Printf("  - %s: %d\n", pokemon.Stats[i].Stat.Name, pokemon.Stats[i].BaseStat)
+	}
+
+	fmt.Printf("Types: \n")
+	for i := range len(pokemon.Types) {
+		fmt.Printf("  - %s\n", pokemon.Types[i].Type.Name)
+	}
+	return nil
+}
+
+func commandInspect(conf *config, args ...string) error {
+	if conf.pokedex == nil || len(conf.pokedex) == 0 {
+		fmt.Println("Your pokedex is empty. Catch some pokemon first!")
+		return nil
+	}
+	if len(args) == 0 {
+		fmt.Println("please provide a pokemon name to inspect")
+		return nil
+	}
+	pokemonName := args[0]
+	return printPokemonInfoFromPokedex(conf, pokemonName)
 }
 
 type cliCommand struct {
@@ -702,6 +737,11 @@ func main() {
 			name:        "catch",
 			description: "attampt to catch a pokemon",
 			callback:    commandCatch,
+		},
+		"inspect": {
+			name:        "inspect",
+			description: "inspect your pokedex",
+			callback:    commandInspect,
 		},
 	}
 
